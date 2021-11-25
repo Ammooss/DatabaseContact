@@ -1,4 +1,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    Contacts
+    Contact \
+    Contacts \
+    tests-contacts
