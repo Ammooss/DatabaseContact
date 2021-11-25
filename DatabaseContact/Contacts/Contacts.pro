@@ -1,4 +1,5 @@
 QT -= gui
+QT += core sql
 
 TEMPLATE = lib
 DEFINES += CONTACTS_LIBRARY
@@ -10,11 +11,13 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    contacts.cpp
+    contacts.cpp \
+    database.cpp
 
 HEADERS += \
     Contacts_global.h \
-    contacts.h
+    contacts.h \
+    database.h
 
 # Default rules for deployment.
 unix {

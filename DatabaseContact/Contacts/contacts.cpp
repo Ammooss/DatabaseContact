@@ -14,23 +14,6 @@ Contacts::Contacts()
 
 void Contacts::ifFileExist()
 {
-    QStringList filePath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+    //Code à jour dans tst_mytestscontacts.cpp
 
-    if (!csvDir.exists())
-    {
-        qWarning() << "Can't find the folder tests-contacts in AppData/Roaming who contains the csv files";
-    }
-}
-
-void Contacts::insertContactDb()
-{
-    QDirIterator it(csvDir, QDirIterator::NoIteratorFlags);
-    QString data;
-    QFile file(csvDir);
-
-    while (it.hasNext()) {
-    data = file.readLine();
-    wordList = data.split(',');
-
-    }
 }
