@@ -1,3 +1,4 @@
+#include "../Contacts/contacts.h"
 #include <QtTest>
 #include <QCoreApplication>
 
