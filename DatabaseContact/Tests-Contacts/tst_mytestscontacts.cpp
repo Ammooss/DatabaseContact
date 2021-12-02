@@ -17,7 +17,7 @@ class MyTestsContacts : public QObject
 
 public:
     MyTestsContacts();
-    ~MyTestsContacts() override;
+    ~MyTestsContacts();
 
 private slots:
     void initTestCase();
@@ -40,13 +40,6 @@ void MyTestsContacts::initTestCase()
 {
     QDir csvDir = contacts.pathAccess();
     list = contacts.readAllContactsFiles(&csvDir);
-
-    // database init part
-    database->connectionToDataBase(&db);
-//    database.insertAllContactsInDataBase(list);
-
-
-
 }
 
 void MyTestsContacts::cleanupTestCase()
@@ -61,7 +54,8 @@ void MyTestsContacts::test_case1()
 
 void MyTestsContacts::test_case2()
 {
-//    QCOMPARE(database.getCounter(), 1000000);
+    QCOMPARE(database.connectionToDataBase(&db), true);
+    QCOMPARE(database.insertAllContactsInDataBase(list), 1000000);
 }
 
 QTEST_MAIN(MyTestsContacts)

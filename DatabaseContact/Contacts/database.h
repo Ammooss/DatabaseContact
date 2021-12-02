@@ -9,7 +9,9 @@
 #include <QSqlQuery>
 #include <QStandardPaths>
 
-class Database
+#include "Contacts_global.h"
+
+class CONTACTS_EXPORT Database
 {
 private:
 //  QSqlDatabase _Database;
@@ -17,15 +19,14 @@ private:
 
 public:
     Database();
-    void connectionToDataBase(QSqlDatabase *db);
-    void insertAllContactsInDataBase(QStringList contactList);
-    void updateFields(QSqlDatabase *db, QString field);
-    void deleteFields(QSqlDatabase *db, QString field);
-    void exportToCsvFile(QSqlDatabase *db, QDir *csvFile);
+    bool connectionToDataBase(QSqlDatabase *db);
+    int insertAllContactsInDataBase(QStringList contactList);
+//    void updateFields(QSqlDatabase *db, QString field);
+//    void deleteFields(QSqlDatabase *db, QString field);
+//    void exportToCsvFile(QSqlDatabase *db, QDir *csvFile);
 
-    // Test part preparation
-    int coutDataBaseelements(QSqlDatabase *db);
-    int getCounter() const;
+//    // Test part preparation
+//    int coutDataBaseelements(QSqlDatabase *db);
 };
 
 #endif // DATABASE_H

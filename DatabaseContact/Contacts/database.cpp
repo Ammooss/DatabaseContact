@@ -7,18 +7,19 @@ Database::Database()
 
 }
 
-int Database::getCounter() const
-{
-    return counter;
-}
+//int Database::getCounter() const
+//{
+//    return counter;
+//}
 
-void Database::connectionToDataBase(QSqlDatabase *db)
+bool Database::connectionToDataBase(QSqlDatabase *db)
 {
     Contacts contacts;
     *db = QSqlDatabase::addDatabase("QSQLITE");
     if(db->lastError().isValid())
     {
         qCritical() << "addDatabase" << db->lastError().text();
+
     }
 
     // Setup de db file name and open it
@@ -28,6 +29,7 @@ void Database::connectionToDataBase(QSqlDatabase *db)
     if(!db->open())
     {
         qCritical() << "Unable to open db" << db->lastError().text() << dbPath;
+
     }
 
     // Create a table
@@ -51,10 +53,15 @@ void Database::connectionToDataBase(QSqlDatabase *db)
     if(querry.lastError().isValid())
     {
         qWarning() << "CREATE TABLE" << querry.lastError().text();
+        return false;
+    }
+    else
+    {
+        return true;
     }
 }
 
-void Database::insertAllContactsInDataBase(QStringList contactList)
+int Database::insertAllContactsInDataBase(QStringList contactList)
 {
     QSqlQuery query;
     QStringList oneLineSplit;
@@ -82,4 +89,6 @@ void Database::insertAllContactsInDataBase(QStringList contactList)
     {
         qWarning() << query.lastError().text();
     }
+
+    return this->counter;
 }
