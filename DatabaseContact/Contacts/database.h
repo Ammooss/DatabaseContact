@@ -8,21 +8,23 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QStandardPaths>
+#include <QSqlDatabase>
 
+#include "contacts.h"
 #include "Contacts_global.h"
 
 class CONTACTS_EXPORT Database
 {
 private:
-//  QSqlDatabase _Database;
     int counter;
+    Contacts contacts;
 
 public:
     Database();
     bool connectionToDataBase(QSqlDatabase *db);
     int insertAllContactsInDataBase(QStringList contactList);
-//    void updateFields(QSqlDatabase *db, QString field);
-//    void deleteFields(QSqlDatabase *db, QString field);
+    int updateFields(); // QSqlDatabase *db, QString field
+    int deleteFields(); //QSqlDatabase *db, QString field
 //    void exportToCsvFile(QSqlDatabase *db, QDir *csvFile);
 
 //    // Test part preparation

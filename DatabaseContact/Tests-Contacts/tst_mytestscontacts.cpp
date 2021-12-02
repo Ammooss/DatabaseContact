@@ -8,10 +8,12 @@
 class MyTestsContacts : public QObject
 {
     Q_OBJECT
+
+    // Contacts declarations
     Contacts contacts;
     QStringList list;
 
-    // database part
+    // Database declarations
     Database database;
     QSqlDatabase db;
 
@@ -23,7 +25,8 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void test_case1();
-    void test_case2();
+//    void test_case2();
+//    void test_case3();
 };
 
 MyTestsContacts::MyTestsContacts()
@@ -49,13 +52,21 @@ void MyTestsContacts::cleanupTestCase()
 
 void MyTestsContacts::test_case1()
 {
+    // Test des enregistrements de 1M de contact dans une liste
     QCOMPARE(list.count(), 1000000);
-}
 
-void MyTestsContacts::test_case2()
-{
+    // Test de la connection a la base de donnees
     QCOMPARE(database.connectionToDataBase(&db), true);
+
+    // Test de l'insertion des 1M de contact insere dans la DB
     QCOMPARE(database.insertAllContactsInDataBase(list), 1000000);
+
+    // Test de l'update des contact Ynov
+    QCOMPARE(database.updateFields(), 1); // A confirmer (Tester)
+
+    // Test de la suppresion des contacts Facebook
+    QCOMPARE(database.deleteFields(), 1); // A confirmer (Tester)
+
 }
 
 QTEST_MAIN(MyTestsContacts)

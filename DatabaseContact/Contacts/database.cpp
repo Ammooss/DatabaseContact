@@ -1,20 +1,16 @@
 #include "database.h"
 #include "contacts.h"
 
-
 Database::Database()
 {
-
+//    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+//    connectionToDataBase(&db);
 }
-
-//int Database::getCounter() const
-//{
-//    return counter;
-//}
 
 bool Database::connectionToDataBase(QSqlDatabase *db)
 {
-    Contacts contacts;
+
+    // Initialisation de la base de donnees
     *db = QSqlDatabase::addDatabase("QSQLITE");
     if(db->lastError().isValid())
     {
@@ -22,9 +18,9 @@ bool Database::connectionToDataBase(QSqlDatabase *db)
 
     }
 
-    // Setup de db file name and open it
+    // Creation du fichier de la base de donnees et ouverture de celui-ci
     QString dbPath = contacts.getAppdataLocation() + "/contacts.db";
-    db->setDatabaseName(contacts.getAppdataLocation());
+    db->setDatabaseName(dbPath);
 
     if(!db->open())
     {
@@ -32,27 +28,27 @@ bool Database::connectionToDataBase(QSqlDatabase *db)
 
     }
 
-    // Create a table
+    // Creation d'une table dans la base de donnees
+    QSqlQuery query;
     QString tblContactsCreate = "CREATE TABLE IF NOT EXISTS contacts ("
                                   "id INTEGER PRIMARY KEY AUTOINCREMENT," // transform to string...
                                   "GUID STRING,"
                                   "firstname STRING,"
                                   "lastname STRING,"
                                   "email STRING,"
-                                  "tel INT," //STRING
+                                  "tel STRING,"
                                   "category STRING,"
                                   "city STRING,"
-                                  "birth_day DATE," //STRING
+                                  "birth_day STRING,"
                                   "country STRING,"
                                   "list STRING,"
                                   "company STRING"
                                   ")";
-    QSqlQuery querry;
-    querry.exec(tblContactsCreate);
+    query.exec(tblContactsCreate);
 
-    if(querry.lastError().isValid())
+    if(query.lastError().isValid())
     {
-        qWarning() << "CREATE TABLE" << querry.lastError().text();
+        qWarning() << "CREATE TABLE" << query.lastError().text();
         return false;
     }
     else
@@ -72,18 +68,24 @@ int Database::insertAllContactsInDataBase(QStringList contactList)
     query.exec("pragma mmap_size = 30000000000");
     query.exec("PRAGMA journal_mode = wal");
 
-    QString sqlInsert = "INSERT INTO contacts (GUID, firstname, lastname, email, tel, category, city, birth_day,"
-                        " country, list, company) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // Requete d'insertion
+    query.prepare("INSERT INTO contacts (GUID, firstname, lastname, email, tel, category, city, birth_day,"
+                        " country, list, company) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
+
+    // Preparation des donnes a inserer dans la base de donnees
     for (int i = 0; i < contactList.size(); i++) {
         oneLineSplit = contactList[i].split(",");
         for (int j = 1; j < oneLineSplit.size(); j++) {
-            query.bindValue(j, oneLineSplit[j]);
+            query.bindValue(j - 1, oneLineSplit[j]);
         }
+        // Execution de l'insertion
+        query.exec();
+
         this->counter++;
     }
 
-    query.exec(sqlInsert);
+
 
     if (query.lastError().isValid())
     {
@@ -91,4 +93,30 @@ int Database::insertAllContactsInDataBase(QStringList contactList)
     }
 
     return this->counter;
+}
+
+int Database::updateFields()
+{
+    QSqlQuery query; // A Voir
+
+    // Requete d'update
+    query.prepare("UPDATE contacts SET city = 'Toulouse' WHERE company = 'Ynov'");
+
+    // Execution de l'update
+    query.exec();
+
+    return true;
+}
+
+int Database::deleteFields()
+{
+    QSqlQuery query; // A Voir
+
+    // Requete d'update
+    query.prepare("DELETE FROM contacts WHERE company = 'Facebook'");
+
+    // Execution de l'update
+    query.exec();
+
+    return true;
 }
