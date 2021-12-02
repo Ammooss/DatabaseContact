@@ -1,40 +1,50 @@
 #include "database.h"
+#include "contacts.h"
+
 
 Database::Database()
 {
 
 }
 
-void Database::connectionToDataBase(QSqlDatabase *db, QString filePath)
+int Database::getCounter() const
 {
-    *db = QSqlDatabase::addDatabase("SQLITE");
+    return counter;
+}
+
+void Database::connectionToDataBase(QSqlDatabase *db)
+{
+    Contacts contacts;
+    *db = QSqlDatabase::addDatabase("QSQLITE");
     if(db->lastError().isValid())
     {
         qCritical() << "addDatabase" << db->lastError().text();
     }
 
     // Setup de db file name and open it
-    QString dbPath = filePath + "/testdb.db";
-//    qDebug() << "dbPath" << dbPath;
+    QString dbPath = contacts.getAppdataLocation() + "/contacts.db";
+    db->setDatabaseName(contacts.getAppdataLocation());
+
     if(!db->open())
     {
-        qCritical() << "unuable to open db" << db->lastError().text() << dbPath;
+        qCritical() << "Unable to open db" << db->lastError().text() << dbPath;
     }
 
-    // create a table
+    // Create a table
     QString tblContactsCreate = "CREATE TABLE IF NOT EXISTS contacts ("
                                   "id INTEGER PRIMARY KEY AUTOINCREMENT," // transform to string...
-                                  "GUID STRING"
-                                  "firstname STRING"
-                                  "lastname STRING"
-                                  "email STRING"
-                                  "tel STRING"
-                                  "category STRING"
-                                  "city STRING"
-                                  "birth_day STRING"
-                                  "country STRING"
-                                  "list STRING "
-                                  "company STRING";
+                                  "GUID STRING,"
+                                  "firstname STRING,"
+                                  "lastname STRING,"
+                                  "email STRING,"
+                                  "tel INT," //STRING
+                                  "category STRING,"
+                                  "city STRING,"
+                                  "birth_day DATE," //STRING
+                                  "country STRING,"
+                                  "list STRING,"
+                                  "company STRING"
+                                  ")";
     QSqlQuery querry;
     querry.exec(tblContactsCreate);
 
@@ -42,7 +52,34 @@ void Database::connectionToDataBase(QSqlDatabase *db, QString filePath)
     {
         qWarning() << "CREATE TABLE" << querry.lastError().text();
     }
+}
 
+void Database::insertAllContactsInDataBase(QStringList contactList)
+{
+    QSqlQuery query;
+    QStringList oneLineSplit;
+    this->counter = 0;
 
+    query.exec("pragma temp_store = memory");
+    query.exec("PRAGMA synchronous = normal");
+    query.exec("pragma mmap_size = 30000000000");
+    query.exec("PRAGMA journal_mode = wal");
 
+    QString sqlInsert = "INSERT INTO contacts (GUID, firstname, lastname, email, tel, category, city, birth_day,"
+                        " country, list, company) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    for (int i = 0; i < contactList.size(); i++) {
+        oneLineSplit = contactList[i].split(",");
+        for (int j = 1; j < oneLineSplit.size(); j++) {
+            query.bindValue(j, oneLineSplit[j]);
+        }
+        this->counter++;
+    }
+
+    query.exec(sqlInsert);
+
+    if (query.lastError().isValid())
+    {
+        qWarning() << query.lastError().text();
+    }
 }

@@ -1,4 +1,5 @@
 #include "../Contacts/contacts.h"
+#include "../Contacts/database.h"
 #include <QtTest>
 #include <QCoreApplication>
 
@@ -9,6 +10,10 @@ class MyTestsContacts : public QObject
     Q_OBJECT
     Contacts contacts;
     QStringList list;
+
+    // database part
+    Database database;
+    QSqlDatabase db;
 
 public:
     MyTestsContacts();
@@ -36,7 +41,12 @@ void MyTestsContacts::initTestCase()
     QDir csvDir = contacts.pathAccess();
     list = contacts.readAllContactsFiles(&csvDir);
 
-    list.at(1);
+    // database init part
+    database->connectionToDataBase(&db);
+//    database.insertAllContactsInDataBase(list);
+
+
+
 }
 
 void MyTestsContacts::cleanupTestCase()
@@ -51,7 +61,7 @@ void MyTestsContacts::test_case1()
 
 void MyTestsContacts::test_case2()
 {
-
+//    QCOMPARE(database.getCounter(), 1000000);
 }
 
 QTEST_MAIN(MyTestsContacts)

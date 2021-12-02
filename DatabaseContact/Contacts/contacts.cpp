@@ -1,8 +1,4 @@
 #include "contacts.h"
-#include <QString>
-#include <QStandardPaths>
-#include <QDirIterator>
-#include <QDebug>
 
 Contacts::Contacts()
 {

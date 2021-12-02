@@ -11,18 +11,21 @@
 
 class Database
 {
-    QSqlDatabase _Database;
-public:
+private:
+//  QSqlDatabase _Database;
+    int counter;
+
 public:
     Database();
-    void connectionToDataBase(QSqlDatabase *db, QString filePath);
-    void insertAllContactsInDataBase(QStringList contactList, QSqlDatabase *db);
+    void connectionToDataBase(QSqlDatabase *db);
+    void insertAllContactsInDataBase(QStringList contactList);
     void updateFields(QSqlDatabase *db, QString field);
     void deleteFields(QSqlDatabase *db, QString field);
     void exportToCsvFile(QSqlDatabase *db, QDir *csvFile);
 
     // Test part preparation
     int coutDataBaseelements(QSqlDatabase *db);
+    int getCounter() const;
 };
 
 #endif // DATABASE_H
