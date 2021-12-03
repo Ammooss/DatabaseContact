@@ -11,7 +11,7 @@ class MyTestsContacts : public QObject
 
     // Contacts declarations
     Contacts contacts;
-    QStringList list;
+    QStringList csvList;
 
     // Database declarations
     Database database;
@@ -41,7 +41,7 @@ MyTestsContacts::~MyTestsContacts()
 void MyTestsContacts::initTestCase()
 {
     QDir csvDir = contacts.pathAccess();
-    list = contacts.readAllContactsFiles(&csvDir);
+    csvList = contacts.readAllContactsFiles(&csvDir);
 }
 
 void MyTestsContacts::cleanupTestCase()
@@ -52,13 +52,13 @@ void MyTestsContacts::cleanupTestCase()
 void MyTestsContacts::test_case1()
 {
     // Test des enregistrements de 1M de contact dans une liste
-    QCOMPARE(list.count(), 1000000);
+    QCOMPARE(csvList.count(), 1000000);
 
     // Test de la connection a la base de donnees
     QCOMPARE(database.connectionToDataBase(&db), true);
 
     // Test de l'insertion des 1M de contact insere dans la DB
-    QCOMPARE(database.insertAllContactsInDataBase(list), 1000000);
+    QCOMPARE(database.insertAllContactsInDataBase(csvList), 1000000);
 
     // Test de l'update des contact Ynov
     QCOMPARE(database.updateFields(), 1); // Ca marche
