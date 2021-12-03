@@ -25,7 +25,6 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void test_case1();
-    void test_case2();
 };
 
 MyTestsContacts::MyTestsContacts()
@@ -61,15 +60,10 @@ void MyTestsContacts::test_case1()
     QCOMPARE(database.insertAllContactsInDataBase(csvList), 1000000);
 
     // Test de l'update des contact Ynov
-    QCOMPARE(database.updateFields(), 1); // Ca marche
+    QCOMPARE(database.updateFields(), 1);
 
     // Test de la suppresion des contacts Facebook
-    QCOMPARE(database.deleteFields(), 1); // Ca marche
-}
-
-void MyTestsContacts::test_case2()
-{
-
+    QCOMPARE(database.deleteFields(), 1);
 }
 
 QTEST_MAIN(MyTestsContacts)

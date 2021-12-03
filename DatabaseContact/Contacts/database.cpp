@@ -112,7 +112,14 @@ int Database::updateFields()
     // Execution de l'update
     query.exec();
 
-    return true;
+    if (query.lastError().isValid())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 int Database::deleteFields()
@@ -125,34 +132,17 @@ int Database::deleteFields()
     // Execution de l'update
     query.exec();
 
-    return true;
+    if (query.lastError().isValid())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 void Database::exportToCsvFile()
 {
-    // https://www.qtcentre.org/threads/29096-QT-Sqlite-database-import-export-csv-file7
-    // https://forum.qt.io/topic/94389/how-toconvert-sqlite3-database-file-to-csv-file-in-qt-code
 
-//    QSqlQuery query;
-//    query.prepare("SELECT * FROM");
-//    QFile csvFile ("output.csv");
-//    if (!csvFile.open(QFile::WriteOnly | QFile::Text)){
-//        qDebug("failed to open csv file");
-//        return;
-//    }
-//    if (!query.exec()){
-//        qDebug("failed to run query");
-//        return;
-//    }
-//    QTextStream outStream(&csvFile);
-//    outStream.setCodec("UTF-8");
-//    while (query.next()){
-//        const QSqlRecord record = query.record();
-//        for (int i=0, recCount = record.count() ; i<recCount ; ++i){
-//            if (i>0)
-//                outStream << ','
-//            outStream << escapedCSV(record.value(i).toString());
-//        }
-//        outStream << '\n';
-//    }
 }
