@@ -24,8 +24,8 @@ public:
     bool connectionToDataBase(QSqlDatabase *db);
     int insertAllContactsInDataBase(QStringList contactList);
     int updateFields(); // QSqlDatabase *db, QString field
-    int deleteFields(); //QSqlDatabase *db, QString field
-//    void exportToCsvFile(QSqlDatabase *db, QDir *csvFile);
+    int deleteFields(); // QSqlDatabase *db, QString field
+    void exportToCsvFile(); // QSqlDatabase *db, QDir *csvFile
 
 //    // Test part preparation
 //    int coutDataBaseelements(QSqlDatabase *db);

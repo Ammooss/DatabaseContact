@@ -3,8 +3,7 @@
 
 Database::Database()
 {
-//    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-//    connectionToDataBase(&db);
+
 }
 
 bool Database::connectionToDataBase(QSqlDatabase *db)
@@ -20,7 +19,16 @@ bool Database::connectionToDataBase(QSqlDatabase *db)
 
     // Creation du fichier de la base de donnees et ouverture de celui-ci
     QString dbPath = contacts.getAppdataLocation() + "/contacts.db";
-    db->setDatabaseName(dbPath);
+
+    if (!QFile::exists(dbPath))
+    {
+        db->setDatabaseName(dbPath);
+    }
+    else
+    {
+        QFile::remove(dbPath);
+        db->setDatabaseName(dbPath);
+    }
 
     if(!db->open())
     {
@@ -77,6 +85,7 @@ int Database::insertAllContactsInDataBase(QStringList contactList)
     for (int i = 0; i < contactList.size(); i++) {
         oneLineSplit = contactList[i].split(",");
         for (int j = 1; j < oneLineSplit.size(); j++) {
+            oneLineSplit[11].replace("\r\n", "");
             query.bindValue(j - 1, oneLineSplit[j]);
         }
         // Execution de l'insertion
@@ -84,8 +93,6 @@ int Database::insertAllContactsInDataBase(QStringList contactList)
 
         this->counter++;
     }
-
-
 
     if (query.lastError().isValid())
     {
@@ -97,7 +104,7 @@ int Database::insertAllContactsInDataBase(QStringList contactList)
 
 int Database::updateFields()
 {
-    QSqlQuery query; // A Voir
+    QSqlQuery query;
 
     // Requete d'update
     query.prepare("UPDATE contacts SET city = 'Toulouse' WHERE company = 'Ynov'");
@@ -110,7 +117,7 @@ int Database::updateFields()
 
 int Database::deleteFields()
 {
-    QSqlQuery query; // A Voir
+    QSqlQuery query;
 
     // Requete d'update
     query.prepare("DELETE FROM contacts WHERE company = 'Facebook'");
@@ -119,4 +126,9 @@ int Database::deleteFields()
     query.exec();
 
     return true;
+}
+
+void Database::exportToCsvFile()
+{
+
 }

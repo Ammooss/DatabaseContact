@@ -28,13 +28,12 @@ QStringList Contacts::readAllContactsFiles(QDir *csvDir)
         {
             // Creation du dossier si inexistant
             QDir().mkdir(this->getAppdataLocation());
-            qWarning() << "Can't find the folder tests-contacts in AppData/Roaming that contains the csv files";
+            qWarning() << "Can't find the folder tests-contacts in AppData/Roaming who will contains the csv files";
         }
         else
         {
             qDebug() << "Found it !";
         }
-
 
         // Ajout des contacts dans une liste
         while (it.hasNext())
@@ -51,5 +50,4 @@ QStringList Contacts::readAllContactsFiles(QDir *csvDir)
         }
 
         return contactList;
-
 }
