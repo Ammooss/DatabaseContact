@@ -19,7 +19,7 @@ QDir Contacts::pathAccess()
 
 QStringList Contacts::readAllContactsFiles(QDir *csvDir)
 {
-    // Lecture des CSV et ajout des contacts a une liste
+        // Lecture des CSV et ajout des contacts a une liste
         QDirIterator it(*csvDir, QDirIterator::NoIteratorFlags);
         QStringList contactList;
         QString data;
